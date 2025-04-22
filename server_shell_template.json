@@ -1,0 +1,8 @@
+{
+  "name": "server_shell",
+  "description": "This tool allows you to execute ANY shell command on the Ubuntu 24.04.1 LTS Server, nirostools.com. use this for literally anything you need to do on the remote server. THIS TOOLSHOULD NEVER USE COMMANDS THAT HANG, like 'tail -f' etc.",
+  "color": "linear-gradient(rgb(87,103,96), rgb(27,127,183))",
+  "iconSrc": "",
+  "schema": "[{\"id\":0,\"property\":\"command\",\"description\":\"Any command you need performing on the server (i.e. tail /var/log/mylog.log , ls -laF , mkdir new-folder etc')\",\"type\":\"string\",\"required\":true}]",
+  "func": "const fetch = require('node-fetch');\n\nconst url = 'https://run.nirostools.com/run';\nconst options = {\n    method: 'POST',\n    headers: {\n        'Authorization': $vars.agent_shell,\n        'Content-Type': 'application/json'\n    },\n    body: JSON.stringify({ command: $command })\n};\n\ntry {\n    const response = await fetch(url, options);\n    const json = await response.json();\n    return JSON.stringify(json, null, 2); // Pretty printed result\n} catch (error) {\n    console.error(error);\n    return `Error: ${error.message}`;\n}\n"
+}
